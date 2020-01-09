@@ -21,7 +21,7 @@ class Client(models.Model):
     password = models.CharField(max_length=100)
 
     def __str__(self):
-        return "{id:" + self.id.__str__() + ",nom:" + self.nom + ",prenom:" + self.prenom +  ",date_naissance" + self.date_naissance.__str__() + ",email:" + self.email + ",login:" + self.login + ",password:" + self.password + "}"
+        return "{id:" + self.id.__str__() + ",nom:" + self.nom + ",prenom:" + self.prenom +",adresse:"+self.ville+  ",date_naissance" + self.date_naissance.__str__() + ",email:" + self.email + ",login:" + self.login + ",password:" + self.password + "}"
 
     class Meta:
         managed = False
@@ -36,6 +36,9 @@ class Commande(models.Model):
     menu = models.ForeignKey('Menu', models.DO_NOTHING, db_column='Menu_id')  # Field name made lowercase.
     client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client')
 
+    def __str__(self):
+        return "{id:"+self.id.__str__()+",date:"+self.date.__str__()+",heure:"+self.heure.__str__()+",etat:"+self.etat+"reservation:"+self.reservation.id.__str__()+",menu:"+self.menu.id.__str__()+"}"
+
     class Meta:
         managed = False
         db_table = 'Commande'
@@ -47,6 +50,9 @@ class Element(models.Model):
     menu = models.ForeignKey('Menu', models.DO_NOTHING)
     prix = models.FloatField()
 
+    def __str__(self):
+        return "{id:"+self.id.__str__()+",libelle:"+self.libelle+",type:"+self.type+",prix:"+self.prix.__str__()+",menuid:"+self.menu.id.__str__()+"}"
+
     class Meta:
         managed = False
         db_table = 'Element'
@@ -55,6 +61,9 @@ class Element(models.Model):
 class Menu(models.Model):
     libelle = models.CharField(db_column='Libelle', max_length=200)  # Field name made lowercase.
     prix_total = models.FloatField(blank=True, null=True)
+
+    def __str__(self):
+        return "{id:"+self.id.__str__()+",libelle:"+self.libelle+",prix_total:"+self.prix_total.__str__()+"}"
 
     class Meta:
         managed = False
@@ -73,6 +82,9 @@ class Proprietaire(models.Model):
     login = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
 
+    def __str__(self):
+        return "{id:"+self.id.__str__()+",nom:"+self.nom+",prenom:"+self.prenom+",adresse:"+self.ville+",email:"+self.email+",date_naissance:"+self.date_naissance.__str__()+",login:"+self.login+",password:"+self.password+"}"
+
     class Meta:
         managed = False
         db_table = 'Proprietaire'
@@ -84,6 +96,9 @@ class Reservation(models.Model):
     nb_personnes = models.IntegerField()
     etat = models.CharField(max_length=200)
     client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client')
+
+    def __str__(self):
+        return "{id:"+self.id.__str__()+",date:"+self.date.__str__()+",heure:"+self.heure.__str__()+",nb_personnes:"+self.nb_personnes+",etat:"+self.etat+"}"
 
     class Meta:
         managed = False

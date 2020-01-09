@@ -16,8 +16,16 @@ def hello(request,id):
 
 
 class clientslist(APIView):
-    def get(self,request,format=None):
-        clients=Client.objects.get(id=2)
+    def get(self,request,id,format=None):
+        clients=Client.objects.get(id=id)
+
+        return Response(clients.__str__())
+    def post(self,request,format=None):
+        pass
+
+class login_Client(APIView):
+    def get(self,request,login,password,format=None):
+        clients=Client.objects.filter(login=login)
 
         return Response(clients.__str__())
     def post(self,request,format=None):

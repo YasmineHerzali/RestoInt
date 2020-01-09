@@ -11,7 +11,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     url(r'customview', CustomView.as_view()),
-    url(r'client', views.clientslist.as_view())
+    url(r'client/(?P<id>.+)', views.clientslist.as_view())
 ]
 
 urlpatterns += router.urls
