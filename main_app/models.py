@@ -12,36 +12,17 @@ class Client(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     nom = models.CharField(db_column='Nom', max_length=100)  # Field name made lowercase.
     prenom = models.CharField(db_column='Prenom', max_length=100)  # Field name made lowercase.
-    num_rue = models.CharField(max_length=100)
-    ville = models.CharField(max_length=100)
-    zip_code = models.IntegerField()
+    adresse = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
-    date_naissance = models.DateField()
     login = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
 
     def __str__(self):
-        return "{id:" + self.id.__str__() + ",nom:" + self.nom + ",prenom:" + self.prenom +",adresse:"+self.ville+  ",date_naissance" + self.date_naissance.__str__() + ",email:" + self.email + ",login:" + self.login + ",password:" + self.password + "}"
+        return "{id:" + self.id.__str__() + ",nom:" + self.nom + ",prenom:" + self.prenom + ",adresse:" + self.adresse + ",email:" + self.email + ",login:" + self.login + ",password:" + self.password + "}"
 
     class Meta:
         managed = False
         db_table = 'Client'
-
-
-class Commande(models.Model):
-    date = models.DateField()
-    heure = models.TimeField()
-    etat = models.CharField(max_length=200)
-    reservation = models.ForeignKey('Reservation', models.DO_NOTHING)
-    menu = models.ForeignKey('Menu', models.DO_NOTHING, db_column='Menu_id')  # Field name made lowercase.
-    client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client')
-
-    def __str__(self):
-        return "{id:"+self.id.__str__()+",date:"+self.date.__str__()+",heure:"+self.heure.__str__()+",etat:"+self.etat+"reservation:"+self.reservation.id.__str__()+",menu:"+self.menu.id.__str__()+"}"
-
-    class Meta:
-        managed = False
-        db_table = 'Commande'
 
 
 class Element(models.Model):
@@ -49,9 +30,10 @@ class Element(models.Model):
     type = models.CharField(max_length=14)
     menu = models.ForeignKey('Menu', models.DO_NOTHING)
     prix = models.FloatField()
+    img_url = models.CharField(max_length=200)
 
     def __str__(self):
-        return "{id:"+self.id.__str__()+",libelle:"+self.libelle+",type:"+self.type+",prix:"+self.prix.__str__()+",menuid:"+self.menu.id.__str__()+"}"
+        return "{id:" + self.id.__str__() + ",libelle:" + self.libelle + ",type:" + self.type + ",prix:" + self.prix.__str__() + ",menuid:" + self.menu.id.__str__() +",img_url:"+self.img_url+ "}"
 
     class Meta:
         managed = False
@@ -61,9 +43,10 @@ class Element(models.Model):
 class Menu(models.Model):
     libelle = models.CharField(db_column='Libelle', max_length=200)  # Field name made lowercase.
     prix_total = models.FloatField(blank=True, null=True)
+    titre = models.CharField(max_length=100)
 
     def __str__(self):
-        return "{id:"+self.id.__str__()+",libelle:"+self.libelle+",prix_total:"+self.prix_total.__str__()+"}"
+        return "{id:" + self.id.__str__() + ",libelle:" + self.libelle + ",prix_total:" + self.prix_total.__str__() + "}"
 
     class Meta:
         managed = False
@@ -74,16 +57,13 @@ class Proprietaire(models.Model):
     id = models.IntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
     nom = models.CharField(db_column='Nom', max_length=100)  # Field name made lowercase.
     prenom = models.CharField(db_column='Prenom', max_length=100)  # Field name made lowercase.
-    num_rue = models.CharField(max_length=100)
-    ville = models.CharField(max_length=100)
-    zip_code = models.IntegerField()
+    adresse = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
-    date_naissance = models.DateField()
     login = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
 
     def __str__(self):
-        return "{id:"+self.id.__str__()+",nom:"+self.nom+",prenom:"+self.prenom+",adresse:"+self.ville+",email:"+self.email+",date_naissance:"+self.date_naissance.__str__()+",login:"+self.login+",password:"+self.password+"}"
+        return "{id:" + self.id.__str__() + ",nom:" + self.nom + ",prenom:" + self.prenom + ",adresse:" + self.adresse + ",email:" + self.email +  ",login:" + self.login + ",password:" + self.password + "}"
 
     class Meta:
         managed = False
@@ -98,26 +78,24 @@ class Reservation(models.Model):
     client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client')
 
     def __str__(self):
-        return "{id:"+self.id.__str__()+",date:"+self.date.__str__()+",heure:"+self.heure.__str__()+",nb_personnes:"+self.nb_personnes+",etat:"+self.etat+"}"
+        return "{id:" + self.id.__str__() + ",date:" + self.date.__str__() + ",heure:" + self.heure.__str__() + ",nb_personnes:" + self.nb_personnes.__str__() + ",etat:" + self.etat + "}"
 
     class Meta:
         managed = False
         db_table = 'Reservation'
 
 
-class ReservationTables(models.Model):
-    reservation = models.OneToOneField(Reservation, models.DO_NOTHING, db_column='reservation', primary_key=True)
-    table = models.ForeignKey('Table', models.DO_NOTHING)
+class Commande(models.Model):
+    date = models.DateField()
+    heure = models.TimeField()
+    etat = models.CharField(max_length=200)
+    reservation = models.ForeignKey(Reservation, models.DO_NOTHING)
+    menu = models.ForeignKey(Menu, models.DO_NOTHING, db_column='Menu_id')  # Field name made lowercase.
+    client = models.ForeignKey(Client, models.DO_NOTHING, db_column='client')
+
+    def __str__(self):
+        return "{id:" + self.id.__str__() + ",date:" + self.date.__str__() + ",heure:" + self.heure.__str__() + ",etat:" + self.etat + "reservation:" + self.reservation.id.__str__() + ",menu:" + self.menu.id.__str__() + "}"
 
     class Meta:
         managed = False
-        db_table = 'Reservation_tables'
-        unique_together = (('reservation', 'table'),)
-
-
-class Table(models.Model):
-    numero_table = models.AutoField(primary_key=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Table'
+        db_table = 'commande'
