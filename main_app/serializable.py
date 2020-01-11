@@ -8,7 +8,15 @@ from main_app.models import *
 class ClientSerializer(serializers.ModelSerializer ):
 
     class Meta:
-        #model = Client
+        model = Client
+        fields = ('id','nom','prenom','adresse','email','login','password')
 
-        fields = ('id','nom','prenom','ville','email','date_naissance','login','password')
+class CommandeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Commande
+        fields = '__all__'
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Reservation
+        fields = '__all__'
 

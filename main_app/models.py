@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Client(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    id = models.IntegerField(primary_key=True)  # Field name made lowercase.
     nom = models.CharField(db_column='Nom', max_length=100)  # Field name made lowercase.
     prenom = models.CharField(db_column='Prenom', max_length=100)  # Field name made lowercase.
     adresse = models.CharField(max_length=100)
@@ -27,7 +27,7 @@ class Client(models.Model):
 
 class Element(models.Model):
     libelle = models.CharField(db_column='Libelle', max_length=200)  # Field name made lowercase.
-    type = models.CharField(max_length=14)
+    type = models.CharField(max_length=200)
     menu = models.ForeignKey('Menu', models.DO_NOTHING)
     prix = models.FloatField()
     img_url = models.CharField(max_length=200)
@@ -44,9 +44,10 @@ class Menu(models.Model):
     libelle = models.CharField(db_column='Libelle', max_length=200)  # Field name made lowercase.
     prix_total = models.FloatField(blank=True, null=True)
     titre = models.CharField(max_length=100)
+    type=models.CharField(max_length=100)
 
     def __str__(self):
-        return "{id:" + self.id.__str__() + ",libelle:" + self.libelle + ",prix_total:" + self.prix_total.__str__() + "}"
+        return "{id:" + self.id.__str__() + ",libelle:" + self.libelle + ",prix_total:" + self.prix_total.__str__() + ",type:"+self.type+"}"
 
     class Meta:
         managed = False
